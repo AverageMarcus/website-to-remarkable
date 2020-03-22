@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='manifest' href='/manifest.json'>
+  <title>Website to reMarkable</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-size: 2em;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    input, button {
+      margin: 10px 10px;
+      font-size: 1.8em;
+      line-height: 1.5em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀</h1>
+  <input type="url" id="URL" />
+  <button id="sendButton">SEND</button>
+
+  <script>
+    document.getElementById('sendButton').addEventListener('click', () => {
+      fetch(window.location + `?website=${document.getElementById("URL").value}`)
+        .then(res => tes.text())
+        .then(console.log);
+    })
+  </script>
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@pwabuilder/pwainstall"></script>
+  <pwa-install></pwa-install>
+
+</body>
+</html>
