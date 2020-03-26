@@ -41,9 +41,7 @@
 
   <script>
     document.getElementById('sendButton').addEventListener('click', () => {
-      fetch(window.location + `?website=${document.getElementById("URL").value}`)
-        .then(res => tes.text())
-        .then(console.log);
+      window.location = window.location + `?website=${document.getElementById("URL").value}`;
     })
   </script>
 

@@ -4,7 +4,7 @@ const fs = require("fs");
 const puppeteer = require('puppeteer');
 const { Remarkable } = require('remarkable-typescript');
 
-const client = new Remarkable({ token: process.env.REMARKABLE_TOKEN });
+let token = process.env.REMARKABLE_TOKEN;
 
 const server = http.createServer(async (req, res) => {
   const incomingURL = new URL(`http://localhost:8000${req.url}`);
@@ -67,7 +67,7 @@ async function sendPage(website, tries = 0) {
   try {
     const page = await browser.newPage();
     await page.emulate(Object.assign({}, puppeteer.devices["iPad Pro"], { userAgent: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" }));
-    await page.goto(website.toString());
+    await page.goto(website.toString(), { referer: "https://www.google.com/" });
     const title = await page.title()
     console.log("Page loaded. Title - " + title)
 
@@ -80,9 +80,10 @@ async function sendPage(website, tries = 0) {
       })
     } );
 
-    const myPDF = await page.pdf({ format: 'A3' });
+    const myPDF = await page.pdf({ format: 'A3', margin: {top: 5, bottom: 5} });
     console.log("Saved to PDF")
 
+    const client = new Remarkable({ token });
     await client.uploadPDF(title, myPDF);
     console.log("Uploaded to reMarkable");
 
