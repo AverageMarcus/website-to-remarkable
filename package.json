@@ -9,10 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "crypto-random-string": "^3.2.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "jszip": "^3.2.2",
     "puppeteer": "^2.1.1",
-    "remarkable-typescript": "^1.0.5"
+    "uuid4": "^1.1.4"
   }
 }
