@@ -47,7 +47,7 @@ ci:
 
 .PHONY: release # Release the latest version of the application
 release:
-	@echo "⚠️ 'release' unimplemented"
+	kubectl --namespace website-to-remarkable set image deployment website-to-remarkable web=docker.cluster.fun/averagemarcus/website-to-remarkable:$(SHA)
 
 .PHONY: help # Show this list of commands
 help:
