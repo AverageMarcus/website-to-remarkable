@@ -47,7 +47,7 @@ ci:
 
 .PHONY: release # Release the latest version of the application
 release:
-	kubectl --namespace website-to-remarkable set image deployment website-to-remarkable web=docker.cluster.fun/private/website-to-remarkable:$(SHA)
+	kubectl --namespace website-to-remarkable set image deployment website-to-remarkable web=docker.cluster.fun/averagemarcus/website-to-remarkable:$(SHA)
 
 .PHONY: help # Show this list of commands
 help:
