@@ -23,7 +23,6 @@ run-tests:
 
 .PHONY: fetch-deps # Fetch all project dependencies
 fetch-deps:
-	@echo "⚠️ 'fetch-deps' unimplemented"
 	@npm install
 
 .PHONY: build # Build the project
