@@ -17,6 +17,9 @@ const server = http.createServer(async (req, res) => {
     if (website.toString().endsWith(".pdf")) {
       fn = sendPDF;
     }
+    if (website.toString().endsWith(".epub")) {
+      fn = sendEpub;
+    }
 
     if (await fn(website)) {
       fs.readFile(__dirname + "/success.html", function (err,data) {
@@ -78,6 +81,25 @@ async function sendPDF(website, tries = 0) {
     console.log(ex);
     if (tries < 5) {
       return await sendPDF(website, ++tries);
+    } else {
+      return false;
+    }
+  }
+}
+
+async function sendEpub(website, tries = 0) {
+  try {
+    const response = await axios.get(website.toString(), {
+      responseType: 'arraybuffer'
+    })
+    const title = website.toString().substring(website.toString().lastIndexOf("/")+1, website.toString().lastIndexOf("."))
+    await sendToRemarkable(title, Buffer.from(response.data, 'binary'), 'epub');
+
+    return true;
+  } catch (ex) {
+    console.log(ex);
+    if (tries < 5) {
+      return await sendEpub(website, ++tries);
     } else {
       return false;
     }
@@ -208,7 +230,7 @@ async function sendPage(website, tries = 0) {
   }
 }
 
-async function sendToRemarkable(title, myPDF) {
+async function sendToRemarkable(title, myPDF, fileType = "pdf") {
   try {
     // Refresh token
     let response = await axios.post(
@@ -257,7 +279,7 @@ async function sendToRemarkable(title, myPDF) {
     let zip = new JSZip();
     zip.file(`${ID}.content`, JSON.stringify({
       extraMetadata: {},
-      fileType: 'pdf',
+      fileType: fileType,
       lastOpenedPage: 0,
       lineHeight: -1,
       margins: 180,
@@ -266,7 +288,7 @@ async function sendToRemarkable(title, myPDF) {
       transform: {},
     }));
     zip.file(`${ID}.pagedata`, []);
-    zip.file(`${ID}.pdf`, myPDF);
+    zip.file(`${ID}.${fileType}`, myPDF);
     const zipContent = await zip.generateAsync({ type: 'nodebuffer' });
 
     // Upload zip
