@@ -154,7 +154,7 @@ async function sendPage(website, tries = 0) {
       content: " [" attr(href) "] ";
       font-size: 0.7em;
     }
-    a[href^="#"]:after, a[href^="/"]:after {
+    a[href^="#"]:after, a[href^="/"]:after, a[href^="javascript:"]:after {
       content: "";
     }
     blockquote {
