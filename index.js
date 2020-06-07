@@ -238,7 +238,10 @@ async function sendPage(website, tries = 0) {
           if (document.querySelector('.collapsible-block-unfolded')) {
             document.querySelector('.collapsible-block-unfolded').style.display = "block";
           }
-          document.body.innerHTML = document.getElementById('page-content').innerHTML;
+          if (document.querySelector('.page-rate-widget-box')) {
+            document.querySelector('.page-rate-widget-box').style.display = "none";
+          }
+          document.body.innerHTML = `<h1>${document.getElementById('page-title').innerHTML}</h1>` + document.getElementById('page-content').innerHTML;
         } else if (isProbablyReaderable(document.cloneNode(true))) {
           var documentClone = document.cloneNode(true);
           var article = new Readability(documentClone).parse();
