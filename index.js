@@ -235,7 +235,9 @@ async function sendPage(website, tries = 0) {
         [...document.querySelectorAll('img[src^="https://miro.medium.com/max/60/"]')].forEach(node => node.style.display = "none")
 
         if (window.location.hostname === "scp-wiki.wikidot.com") {
-          document.querySelector('.collapsible-block-unfolded').style.display = "block";
+          if (document.querySelector('.collapsible-block-unfolded')) {
+            document.querySelector('.collapsible-block-unfolded').style.display = "block";
+          }
           document.body.innerHTML = document.getElementById('page-content').innerHTML;
         } else if (isProbablyReaderable(document.cloneNode(true))) {
           var documentClone = document.cloneNode(true);
