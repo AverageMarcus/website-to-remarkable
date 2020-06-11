@@ -215,12 +215,23 @@ async function sendPage(website, tries = 0) {
     .creditRate,
     .collapsible-block-folded,
     .collapsible-block-unfolded-link,
-    .footer-wikiwalk-nav {
+    .footer-wikiwalk-nav,
+    .licensebox,
+    .translation_block,
+    #u-author_block,
+    .u-faq,
+    .info-container {
       display: none !important;
     }
     .collapsible-block-unfolded {
       display: block !important;
     }
+
+    .anom-bar-container {
+      max-width: 80% !important;
+      font-size: 10pt;
+    }
+
     `});
 
     await page.evaluate(async () => {
@@ -241,6 +252,11 @@ async function sendPage(website, tries = 0) {
           if (document.querySelector('.page-rate-widget-box')) {
             document.querySelector('.page-rate-widget-box').style.display = "none";
           }
+
+          [...document.querySelectorAll('a.footnoteref')].forEach(ref => {
+            ref.innerText = document.getElementById(ref.id.replace("ref", "")).innerText;
+          });
+
           document.body.innerHTML = `<h1>${document.getElementById('page-title').innerHTML}</h1>` + document.getElementById('page-content').innerHTML;
         } else if (isProbablyReaderable(document.cloneNode(true))) {
           var documentClone = document.cloneNode(true);
