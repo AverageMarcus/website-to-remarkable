@@ -159,7 +159,7 @@ async function sendPage(website, tries = 0) {
     }
     blockquote {
       margin: 10px 2px;
-      line-height: 2em;
+      line-height: 1.5em;
       border: 0;
       border-left: 8px solid grey;
       padding-left: 8px;
@@ -220,7 +220,9 @@ async function sendPage(website, tries = 0) {
     .translation_block,
     #u-author_block,
     .u-faq,
-    .info-container {
+    .info-container,
+    .diamond-part,
+    [class*='licensebox'] {
       display: none !important;
     }
     .collapsible-block-unfolded {
@@ -230,6 +232,19 @@ async function sendPage(website, tries = 0) {
     .anom-bar-container {
       max-width: 80% !important;
       font-size: 10pt;
+    }
+    .anom-bar-container a:after {
+      content: "" !important;
+    }
+    .disrupt-class:before,
+    .disrupt-class:after,
+    .risk-class:before,
+    .risk-class:after,
+    .anom-bar-container .main-class:before,
+    .anom-bar-container .main-class:after {
+      display: none !important;
+      content: "" !important;
+      border: none !important;
     }
 
     `});
@@ -245,7 +260,7 @@ async function sendPage(website, tries = 0) {
         // Remove medium blur images
         [...document.querySelectorAll('img[src^="https://miro.medium.com/max/60/"]')].forEach(node => node.style.display = "none")
 
-        if (window.location.hostname === "scp-wiki.wikidot.com") {
+        if (window.location.hostname.includes("scp-wiki")) {
           if (document.querySelector('.collapsible-block-unfolded')) {
             document.querySelector('.collapsible-block-unfolded').style.display = "block";
           }
@@ -296,7 +311,11 @@ async function sendPage(website, tries = 0) {
     const myPDF = await page.pdf({ format: 'A4', margin: {top: 40, bottom: 40, left: 40, right: 40} });
     console.log("Saved to PDF")
 
-    await sendToRemarkable(title, myPDF);
+    if (process.env.DEBUG == "true") {
+      fs.writeFileSync(title+'.pdf', myPDF);
+    } else {
+      await sendToRemarkable(title, myPDF);
+    }
 
     return true;
   } catch (ex) {
