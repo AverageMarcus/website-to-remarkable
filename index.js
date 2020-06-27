@@ -317,6 +317,21 @@ async function sendPage(website, tries = 0) {
       await sendToRemarkable(title, myPDF);
     }
 
+    // If SCP, try and fetch associated tales
+    let scpMatch = website.toString().match(/^https?:\/\/.*scp-wiki.*\/scp-([0-9]+)$/i)
+    if (scpMatch) {
+      let scp = scpMatch[1];
+      let series = Number(scp[0]) + 1;
+      await page.goto(`http://www.scp-wiki.net/scp-series-${series}-tales-edition`);
+      let tales = await page.$$(`a[href="/scp-${scp}"]+ul a`);
+      if (tales.length) {
+        for (let tale of tales) {
+          let link = await tale.evaluate(a => a.href);
+          sendPage(link)
+        }
+      }
+    }
+
     return true;
   } catch (ex) {
     console.log(ex);
