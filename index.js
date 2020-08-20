@@ -322,6 +322,9 @@ async function sendPage(website, tries = 0) {
     if (scpMatch) {
       let scp = scpMatch[1];
       let series = Number(scp[0]) + 1;
+      if (Number(scp) < 1000) {
+        series = 1;
+      }
       await page.goto(`http://www.scp-wiki.net/scp-series-${series}-tales-edition`);
       let tales = await page.$$(`a[href="/scp-${scp}"]+ul a`);
       if (tales.length) {
