@@ -260,16 +260,18 @@ async function sendPage(website, tries = 0) {
         // Remove medium blur images
         [...document.querySelectorAll('img[src^="https://miro.medium.com/max/60/"]')].forEach(node => node.style.display = "none")
 
-        if (window.location.hostname.includes("scp-wiki")) {
+        if (window.location.hostname.includes("scp-wiki") || window.location.hostname.includes("scpwiki")) {
           if (document.querySelector('.collapsible-block-unfolded')) {
             document.querySelector('.collapsible-block-unfolded').style.display = "block";
-          }
-          if (document.querySelector('.page-rate-widget-box')) {
-            document.querySelector('.page-rate-widget-box').style.display = "none";
           }
 
           [...document.querySelectorAll('a.footnoteref')].forEach(ref => {
             ref.innerText = document.getElementById(ref.id.replace("ref", "")).innerText;
+          });
+
+          [...document.querySelectorAll('details')].forEach(details => details.setAttribute('open', ''));
+          [...document.querySelectorAll('body script,body iframe,.page-rate-widget-box,.page-rate-widget-box,.footer-wikiwalk-nav,.desktop-only,.info-container,.licensebox22,#print-options,#print-head,#license-area,#container>hr,#page-info,.collapsible-block-link,.yui-nav,#toc,.creditRate,#u-credit-view,#ncmp__tool,#wiki-tab-0-1,.ncmp__normalise,img[src^="http://www.wikidot.com/avatar.php"],#odialog-hovertips,img[alt="facility-texture.png"],span.siteIcon,span.areaIcon')].forEach(node => {
+            node.remove();
           });
 
           document.body.innerHTML = `<h1>${document.getElementById('page-title').innerHTML}</h1>` + document.getElementById('page-content').innerHTML;
