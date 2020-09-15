@@ -275,18 +275,24 @@ async function sendPage(website, tries = 0) {
           });
 
           document.body.innerHTML = `<h1>${document.getElementById('page-title').innerHTML}</h1>` + document.getElementById('page-content').innerHTML;
-        } else if (isProbablyReaderable(document.cloneNode(true))) {
-          var documentClone = document.cloneNode(true);
-          var article = new Readability(documentClone).parse();
-          var postedDate = document.querySelector('time[datetime]');
-          var content = `
-            <header>
-              <h1>${article.title}</h1>
-              ${article.byline ? `<blockquote>${article.byline}</blockquote>` : ""}
-              ${postedDate && postedDate.getAttribute('datetime') ? `<blockquote>${postedDate.getAttribute('datetime')}</blockquote>` : ""}
-            </header>
-            ` + article.content;
-          document.body.innerHTML = content;
+        } else {
+          try {
+            if (isProbablyReaderable(document.cloneNode(true))) {
+              var documentClone = document.cloneNode(true);
+              var article = new Readability(documentClone).parse();
+              var postedDate = document.querySelector('time[datetime]');
+              var content = `
+                <header>
+                  <h1>${article.title}</h1>
+                  ${article.byline ? `<blockquote>${article.byline}</blockquote>` : ""}
+                  ${postedDate && postedDate.getAttribute('datetime') ? `<blockquote>${postedDate.getAttribute('datetime')}</blockquote>` : ""}
+                </header>
+                ` + article.content;
+              document.body.innerHTML = content;
+            }
+          } catch (ex) {
+            console.log("Failed to detect if readable")
+          }
         }
 
         [...document.querySelectorAll('details')].forEach(details => details.setAttribute('open', ''));
