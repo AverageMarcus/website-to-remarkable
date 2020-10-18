@@ -73,7 +73,7 @@ async function sendPDF(website, tries = 0) {
     const response = await axios.get(website.toString(), {
       responseType: 'arraybuffer'
     })
-    const title = website.toString().substring(website.toString().lastIndexOf("/")+1, website.toString().lastIndexOf("."))
+    const title = decodeURIComponent(website.toString().substring(website.toString().lastIndexOf("/")+1, website.toString().lastIndexOf(".")));
     await sendToRemarkable(title, Buffer.from(response.data, 'binary'));
 
     return true;
@@ -92,7 +92,7 @@ async function sendEpub(website, tries = 0) {
     const response = await axios.get(website.toString(), {
       responseType: 'arraybuffer'
     })
-    const title = website.toString().substring(website.toString().lastIndexOf("/")+1, website.toString().lastIndexOf("."))
+    const title = decodeURIComponent(website.toString().substring(website.toString().lastIndexOf("/")+1, website.toString().lastIndexOf(".")));
     await sendToRemarkable(title, Buffer.from(response.data, 'binary'), 'epub');
 
     return true;
